@@ -1,0 +1,11 @@
+I have 2d elements with these fields
+self.width 
+self.height 
+self.max_speed
+self.perception
+self.max_force
+self.position
+self.velocity
+self.acceleration
+element has update and draw methods.
+How can I implement Separation logic for them
