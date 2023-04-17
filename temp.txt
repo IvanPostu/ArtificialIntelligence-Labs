@@ -1,11 +1,10 @@
-I have 2d elements with these fields
-self.width 
-self.height 
-self.max_speed
-self.perception
-self.max_force
-self.position
-self.velocity
-self.acceleration
-element has update and draw methods.
-How can I implement Separation logic for them
+Implement the Vector class in Python that works on simple Python lists. The Vector
+class should implement the vector operations:
+• Vector norm
+• Vector addition
+• Vector subtraction
+• Multiplication with a scalar
+• Division by a scalar
+• Vector dot product
+• Vector cross product.
+

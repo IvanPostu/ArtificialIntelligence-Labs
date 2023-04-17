@@ -1,120 +1,8 @@
 import math
 import numpy as np
 from p5 import *
-
-
-class myVector(object):
-    def __init__(self, *args):
-        if len(args) == 0:
-            self.values = (0, 0)
-        else:
-            self.values = args
-
-    def norm(self):
-        return math.sqrt(sum(x * x for x in self))
-
-    def normalize(self):
-        norm = self.norm()
-        normed = tuple(x / norm for x in self)
-        return self.__class__(*normed)
-
-    def rotate(self, theta):
-        if isinstance(theta, (int, float)):
-            # So, if rotate is passed an int or a float...
-            if len(self) != 2:
-                raise ValueError("Rotation axis not defined for greater than 2D vector")
-            return self._rotate2D(theta)
-        matrix = theta
-        if not all(len(row) == len(self) for row in matrix) or not len(matrix) == len(
-            self
-        ):
-            raise ValueError(
-                "Rotation matrix must be square and same dimensions as vector"
-            )
-        return self.matrix_mult(matrix)
-
-    def _rotate2D(self, theta):
-        theta = math.radians(theta)
-        # Just applying the 2D rotation matrix
-        dc, ds = math.cos(theta), math.sin(theta)
-        x, y = self.values
-        x, y = dc * x - ds * y, ds * x + dc * y
-        return self.__class__(x, y)
-
-    def matrix_mult(self, matrix):
-        if not all(len(row) == len(self) for row in matrix):
-            raise ValueError("Matrix must match vector dimensions")
-        product = tuple(myVector(*row) * self for row in matrix)
-        return self.__class__(*product)
-
-    def inner(self, vector):
-        if not isinstance(vector, myVector):
-            raise ValueError("The dot product requires another vector")
-        return sum(a * b for a, b in zip(self, vector))
-
-    def __mul__(self, other):
-        if isinstance(other, myVector):
-            return self.inner(other)
-        elif isinstance(other, (int, float)):
-            product = tuple(a * other for a in self)
-            return self.__class__(*product)
-        else:
-            raise ValueError(
-                "Multiplication with type {} not supported".format(type(other))
-            )
-
-    def __rmul__(self, other):
-        return self.__mul__(other)
-
-    def __truediv__(self, other):
-        if isinstance(other, myVector):
-            divided = tuple(self[i] / other[i] for i in range(len(self)))
-        elif isinstance(other, (int, float)):
-            divided = tuple(a / other for a in self)
-        else:
-            raise ValueError("Division with type {} not supported".format(type(other)))
-        return self.__class__(*divided)
-
-    def __add__(self, other):
-        """Returns the vector addition of self and other"""
-        if isinstance(other, myVector):
-            added = tuple(a + b for a, b in zip(self, other))
-        elif isinstance(other, (int, float)):
-            added = tuple(a + other for a in self)
-        else:
-            raise ValueError("Addition with type {} not supported".format(type(other)))
-        return self.__class__(*added)
-
-    def __radd__(self, other):
-        """Called if 4 + self for instance"""
-        return self.__add__(other)
-
-    def __sub__(self, other):
-        """Returns the vector difference of self and other"""
-        if isinstance(other, myVector):
-            subbed = tuple(a - b for a, b in zip(self, other))
-        elif isinstance(other, (int, float)):
-            subbed = tuple(a - other for a in self)
-        else:
-            raise ValueError(
-                "Subtraction with type {} not supported".format(type(other))
-            )
-        return self.__class__(*subbed)
-
-    def __rsub__(self, other):
-        return self.__sub__(other)
-
-    def __iter__(self):
-        return self.values.__iter__()
-
-    def __len__(self):
-        return len(self.values)
-
-    def __getitem__(self, key):
-        return self.values[key]
-
-    def __repr__(self):
-        return str(self.values)
+import random
+import array
 
 
 class Boid:
@@ -125,9 +13,13 @@ class Boid:
         self.perception = 100
         self.max_force = 1
         self.position = Vector(x, y)
-        vec = (np.random.rand(2) - 0.5) * 10
+        vec = array.array(
+            "f", [(random.random() - 0.5) * 10, (random.random() - 0.5) * 10]
+        )
         self.velocity = Vector(*vec)
-        vec = (np.random.rand(2) - 0.5) / 2
+        vec = array.array(
+            "f", [(random.random() - 0.5) / 2, (random.random() - 0.5) / 2]
+        )
         self.acceleration = Vector(*vec)
 
     def update(self):
@@ -217,6 +109,7 @@ class Boid:
         separation = self.separation(boids)
         return alignment * 0.02 + cohesion * 0.02 + separation * 0.02
 
+
 boids = []
 
 
@@ -257,8 +150,8 @@ def draw():
             boids.clear()
 
     text_size = 15
-    x = MAX_WIDTH - textWidth(text_msg) - 10  # 10 pixels offset from the right edge
-    y = MAX_HEIGHT - text_size - 10  # 10 pixels offset from the bottom edge
+    x = MAX_WIDTH - textWidth(text_msg) - 10
+    y = MAX_HEIGHT - text_size - 10
     text(text_msg, x, y)
 
 
@@ -275,5 +168,6 @@ def key_pressed():
         text_msg = "Calm flocking"
     if key == "t":
         text_msg = ""
+
 
 run(renderer="vispy")
