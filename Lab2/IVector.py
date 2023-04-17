@@ -1,9 +1,6 @@
-import array
-
-
 class IVector:
     def __init__(self, values):
-        self.values = values
+        self.values = list(values)
 
     def norm(self):
         return sum(x**2 for x in self.values) ** 0.5
@@ -49,7 +46,7 @@ class IVector:
         self.values[index] = new_val
 
 
-v1 = IVector(array.array("f", [1, 2, 3]))
+v1 = IVector([1, 2, 3])
 v2 = IVector([4, 5, 6])
 v3 = v1 + v2
 v4 = v2 - v1
