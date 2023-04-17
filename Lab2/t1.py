@@ -1,5 +1,4 @@
 import math
-import numpy as np
 from p5 import (
     circle,
     background,
@@ -18,7 +17,8 @@ from IVector import IVector
 
 
 class Boid:
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, color=255):
+        self.color = color
         self.width = width
         self.height = height
         self.max_speed = 10
@@ -41,8 +41,8 @@ class Boid:
             self.velocity = self.velocity / self.velocity.norm() * self.max_speed
         self.acceleration = IVector(array.array("f", [0, 0]))
 
-    def show(self, color=255):
-        stroke(color)
+    def show(self):
+        stroke(self.color)
         circle(self.position.get_value(0), self.position.get_value(1), 10)
 
     def edges(self):
@@ -73,31 +73,31 @@ class Boid:
 
     # Proprietatea de a se apropia de flota
     def cohesion(self, boids):
-        steering = Vector(*np.zeros(2))
+        steering = IVector(array.array("f", [0, 0]))
         total = 0
-        center_of_mass = Vector(*np.zeros(2))
+        center_of_mass = IVector(array.array("f", [0, 0]))
         for boid in boids:
-            if np.linalg.norm(boid.position - self.position) < self.perception:
+            if (boid.position - self.position).norm() < self.perception:
                 center_of_mass += boid.position
                 total += 1
         if total > 0:
             center_of_mass /= total
-            center_of_mass = Vector(*center_of_mass)
+            center_of_mass = IVector(center_of_mass.get_values())
             vec_to_com = center_of_mass - self.position
-            if np.linalg.norm(vec_to_com) > 0:
-                vec_to_com = (vec_to_com / np.linalg.norm(vec_to_com)) * self.max_speed
+            if vec_to_com.norm() > 0:
+                vec_to_com = (vec_to_com / vec_to_com.norm()) * self.max_speed
             steering = vec_to_com - self.velocity
-            if np.linalg.norm(steering) > self.max_force:
-                steering = (steering / np.linalg.norm(steering)) * self.max_force
+            if steering.norm() > self.max_force:
+                steering = (steering / steering.norm()) * self.max_force
         return steering
 
     # Proprietatea de a schima directia pentru a evita ciocnirea cu alti asteroizi
     def separation(self, boids):
-        steering = Vector(*np.zeros(2))
+        steering = IVector(array.array("f", [0, 0]))
         total = 0
-        avg_vector = Vector(*np.zeros(2))
+        avg_vector = IVector(array.array("f", [0, 0]))
         for boid in boids:
-            distance = np.linalg.norm(boid.position - self.position)
+            distance = (boid.position - self.position).norm()
             if self.position != boid.position and distance < self.perception:
                 diff = self.position - boid.position
                 diff /= distance
@@ -105,19 +105,19 @@ class Boid:
                 total += 1
         if total > 0:
             avg_vector /= total
-            avg_vector = Vector(*avg_vector)
-            if np.linalg.norm(steering) > 0:
-                avg_vector = (avg_vector / np.linalg.norm(steering)) * self.max_speed
+            avg_vector = IVector(avg_vector.get_values())
+            if steering.norm() > 0:
+                avg_vector = (avg_vector / steering.norm()) * self.max_speed
             steering = avg_vector - self.velocity
-            if np.linalg.norm(steering) > self.max_force:
-                steering = (steering / np.linalg.norm(steering)) * self.max_force
+            if steering.norm() > self.max_force:
+                steering = (steering / steering.norm()) * self.max_force
         return steering
 
     def calm_flocking(self, boids):
         alignment = self.align(boids)
         cohesion = self.cohesion(boids)
         separation = self.separation(boids)
-        return alignment * 0.02 + cohesion * 0.02 + separation * 0.02
+        return alignment * 0.04 + cohesion * 0.02 + separation * 0.02
 
 
 boids = []
@@ -139,7 +139,7 @@ def draw():
     for i in range(len(boids)):
         boids[i].update()
         boids[i].edges()
-        boids[i].show(50 if i == 0 else 255)
+        boids[i].show()
 
         if text_msg == "Separation":
             separation = boids[i].separation(boids)
@@ -155,7 +155,9 @@ def draw():
             boids[i].acceleration += calm_flocking
     if mouse_is_pressed:
         if mouse_button == LEFT:
-            boids.append(Boid(mouse_x, mouse_y, MAX_WIDTH, MAX_HEIGHT))
+            boids.append(
+                Boid(mouse_x, mouse_y, MAX_WIDTH, MAX_HEIGHT, random.randint(50, 255))
+            )
         elif mouse_button == RIGHT:
             boids.clear()
 
