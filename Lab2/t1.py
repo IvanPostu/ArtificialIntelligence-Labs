@@ -1,8 +1,20 @@
 import math
 import numpy as np
-from p5 import *
+from p5 import (
+    circle,
+    background,
+    text,
+    run,
+    textWidth,
+    size,
+    no_stroke,
+    stroke,
+    LEFT,
+    RIGHT,
+)
 import random
 import array
+from IVector import IVector
 
 
 class Boid:
@@ -12,52 +24,50 @@ class Boid:
         self.max_speed = 10
         self.perception = 100
         self.max_force = 1
-        self.position = Vector(x, y)
+        self.position = IVector([x, y])
         vec = array.array(
             "f", [(random.random() - 0.5) * 10, (random.random() - 0.5) * 10]
         )
-        self.velocity = Vector(*vec)
+        self.velocity = IVector(vec)
         vec = array.array(
             "f", [(random.random() - 0.5) / 2, (random.random() - 0.5) / 2]
         )
-        self.acceleration = Vector(*vec)
+        self.acceleration = IVector(vec)
 
     def update(self):
         self.position += self.velocity
         self.velocity += self.acceleration  # limit
-        if np.linalg.norm(self.velocity) > self.max_speed:
-            self.velocity = (
-                self.velocity / np.linalg.norm(self.velocity) * self.max_speed
-            )
-        self.acceleration = Vector(*np.zeros(2))
+        if self.velocity.norm() > self.max_speed:
+            self.velocity = self.velocity / self.velocity.norm() * self.max_speed
+        self.acceleration = IVector(array.array("f", [0, 0]))
 
     def show(self, color=255):
         stroke(color)
-        circle(self.position.x, self.position.y, 10)
+        circle(self.position.get_value(0), self.position.get_value(1), 10)
 
     def edges(self):
-        if self.position.x > self.width:
-            self.position.x = 0
-        elif self.position.x < 0:
-            self.position.x = self.width
-        if self.position.y > self.height:
-            self.position.y = 0
-        elif self.position.y < 0:
-            self.position.y = self.height
+        if self.position.get_value(0) > self.width:
+            self.position.set_value(0, 0)
+        elif self.position.get_value(0) < 0:
+            self.position.set_value(0, self.width)
+        if self.position.get_value(1) > self.height:
+            self.position.set_value(1, 0)
+        elif self.position.get_value(1) < 0:
+            self.position.set_value(1, self.height)
 
     # Proprietatea de a se orienta in directia miscarii flotei
     def align(self, boids):
-        steering = Vector(*np.zeros(2))
+        steering = IVector(array.array("f", [0, 0]))
         total = 0
-        avg_vec = Vector(*np.zeros(2))
+        avg_vec = IVector(array.array("f", [0, 0]))
         for boid in boids:
-            if np.linalg.norm(boid.position - self.position) < self.perception:
+            if (boid.position - self.position).norm() < self.perception:
                 avg_vec += boid.velocity
                 total += 1
         if total > 0:
             avg_vec /= total
-            avg_vec = Vector(*avg_vec)
-            avg_vec = (avg_vec / np.linalg.norm(avg_vec)) * self.max_speed
+            avg_vec = IVector(avg_vec.get_values())
+            avg_vec = (avg_vec / avg_vec.norm()) * self.max_speed
             steering = avg_vec - self.velocity
         return steering
 

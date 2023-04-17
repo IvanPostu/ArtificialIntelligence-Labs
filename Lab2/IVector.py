@@ -1,5 +1,6 @@
 import array
 
+
 class IVector:
     def __init__(self, values):
         self.values = values
@@ -28,6 +29,9 @@ class IVector:
             raise ValueError("Vectors must be the same length")
         return sum(x * y for x, y in zip(self.values, other.values))
 
+    def __str__(self):
+        return "Vector({})".format(self.values)
+
     def cross(self, other):
         if len(self.values) != 3 or len(other.values) != 3:
             raise ValueError("Cross product is only defined for 3-dimensional vectors")
@@ -35,11 +39,17 @@ class IVector:
         x2, y2, z2 = other.values
         return IVector([y1 * z2 - y2 * z1, z1 * x2 - z2 * x1, x1 * y2 - x2 * y1])
 
-    def __str__(self):
-        return "Vector({})".format(self.values)
+    def get_values(self):
+        return self.values.copy()
+
+    def get_value(self, index):
+        return self.values[index]
+
+    def set_value(self, index, new_val):
+        self.values[index] = new_val
 
 
-v1 = IVector(array.array('f', [1, 2, 3]))
+v1 = IVector(array.array("f", [1, 2, 3]))
 v2 = IVector([4, 5, 6])
 v3 = v1 + v2
 v4 = v2 - v1
