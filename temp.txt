@@ -1,10 +1,6 @@
-Implement the Vector class in Python that works on simple Python lists. The Vector
-class should implement the vector operations:
-• Vector norm
-• Vector addition
-• Vector subtraction
-• Multiplication with a scalar
-• Division by a scalar
-• Vector dot product
-• Vector cross product.
-
+('Ion areBudgetTourists', 'Ion prioritize affordability over luxury', 'Ion staying in budget hotels', 'Ion staying in hostels', 'Ion tend to seek out low-cost accommodations and activities', 'Ion travel on a shoestring budget')
+('Jimmy are interested in learning about the traditions', 'Jimmy areCulturalTourists', 'Jimmy enjoy exploring historical sites', 'Jimmy interested in immersing themselves in the local culture of the places', 'Jimmy tend to be curious', 'Jimmy tend to be open-minded')
+('Rick enjoy exploring historical sites', 'Rick interested in immersing themselves in the local culture of the places', 'Rick tend to be curious', 'Rick tend to be open-minded')
+{'Ion prioritize affordability over luxury', 'Ion areBudgetTourists', 'Ion staying in budget hotels', 'Ion tend to seek out low-cost accommodations and activities', 'Ion staying in hostels', 'Ion travel on a shoestring budget'}
+['Jimmy travel with children', 'Jimmy prioritize affordability over luxury', 'Jimmy tend to seek out low-cost accommodations and activities', 'Jimmy tend to prioritize convenience', 'Jimmy staying in budget hotels', 'Jimmy tend to seek out low-cost accommodations and activities', 'Jimmy prioritize experiences over luxury accommodations', 'Jimmy tend to prioritize safety', 'Jimmy likes activities such as extreme sports', 'Jimmy tend to prioritize affordability', 'Jimmy involve an element of risk']
+('Mihai are interested in learning about the traditions', 'Mihai are willing to spend a premium for high-end accommodations', 'Mihai areAdventureTourists', 'Mihai areCulturalTourists', 'Mihai enjoy activities that are physically challenging', 'Mihai enjoy exploring historical sites', 'Mihai interested in immersing themselves in the local culture of the places', 'Mihai likes activities such as hiking', 'Mihai likes activities such as rock climbing', 'Mihai prioritize activities that are suitable for all ages', 'Mihai prioritize comfort and convenience over adventure', 'Mihai prioritize experiences over luxury accommodations', 'Mihai seek out luxury hotels', 'Mihai tend to be curious', 'Mihai tend to be open-minded', 'Mihai tend to be young', 'Mihai tend to have fine dining', 'Mihai tend to have private tours', 'Mihai tend to prioritize affordability', 'Mihai tend to prioritize convenience', 'Mihai tend to prioritize safety', 'Mihai visiting museums')

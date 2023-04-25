@@ -5,7 +5,6 @@ import csv
 def is_colored(image):
     height, width, channels = image.shape
 
-    # Iterate over each pixel and check if it has the same value for all channels
     for y in range(height):
         for x in range(width):
             pixel = image[y, x]
@@ -18,7 +17,6 @@ def is_colored(image):
 def is_portrait(image):
     height, width, channels = image.shape
 
-    # Check if the image is portrait or square
     if height >= width:
         return True
     return False
@@ -32,7 +30,6 @@ def is_eyes_at_same_level(image):
     if len(eyes) != 2:
         return False
 
-    # Get the y-coordinates of the eyes
     y1 = eyes[0][1] + eyes[0][3] // 2
     y2 = eyes[1][1] + eyes[1][3] // 2
 

@@ -10,7 +10,7 @@ import numpy as np
 def blur_function(image_path, kernel_size=(5,5)):
     img = cv2.imread(image_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, kernel_size, 0)
+    blurred = cv2.GaussianBlur(gray, kernel_size, 999)
     fig, axs = plt.subplots(1, 2, figsize=(10,5))
     axs[0].imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     axs[0].set_title('Original Image')
